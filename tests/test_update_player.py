@@ -20,15 +20,13 @@ request_url = 'http://localhost:7071/api/player/update/'
 
 class TestFunction(unittest.TestCase):
 
-    @classmethod
-    def setUpClass(cls) -> None:
+    def setUp(self) -> None:
         try:
             players_container.create_item({"id" : "py_luis", "password": "pythonrulz" , "games_played" : 542 , "total_score" : 3744})
         except Exception as e:
             print(repr(e))
 
-    @classmethod
-    def tearDownClass(cls) -> None:
+    def tearDown(self) -> None:
         try:
             players_container.delete_item(item='py_luis', partition_key='py_luis')
         except Exception as e:
@@ -58,11 +56,14 @@ class TestFunction(unittest.TestCase):
         expected_user = payload
         expected_user['id'] = 'py_luis'
         del expected_user['username']
+        del expected_user['add_to_games_played']
         expected_user['games_played']=544
-        expected_user['total_score']=3746
+        expected_user['total_score']=3744
 
         expected_req_resp = {"result" : True, "msg": "OK" }
 
+        print(user)
+        print(expected_user)
         self.assertEqual(expected_user, user)
         self.assertEqual(expected_req_resp, update_response)
 
@@ -89,8 +90,9 @@ class TestFunction(unittest.TestCase):
         expected_user = payload
         expected_user['id'] = 'py_luis'
         del expected_user['username']
+        del expected_user['add_to_score']
         expected_user['games_played']=544
-        expected_user['total_score']=3744
+        expected_user['total_score']=3746
 
         expected_req_resp = {"result" : True, "msg": "OK" }
 
@@ -120,8 +122,10 @@ class TestFunction(unittest.TestCase):
         expected_user = payload
         expected_user['id'] = 'py_luis'
         del expected_user['username']
-        expected_user['games_played']=554
-        expected_user['total_score']=3776
+        del expected_user['add_to_score']
+        del expected_user['add_to_games_played']
+        expected_user['games_played']=576
+        expected_user['total_score']=3756
 
         expected_req_resp = {"result" : True, "msg": "OK" }
 
