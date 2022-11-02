@@ -22,7 +22,6 @@ request_url = 'http://localhost:7071/api/prompt/create/'
 class TestFunction(unittest.TestCase):
 
     ## Setup test players
-    ## Check items in prompts container
     @classmethod
     def setUpClass(cls) -> None:
         try:
