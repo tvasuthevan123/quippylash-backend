@@ -31,15 +31,9 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
             status_code = 403)
 
     try:
-        resp = list(players_container.query_items(
-            query='SELECT c.password FROM c WHERE c.id=@id',
-            parameters=[
-                {'name':'@id',  'value':submitted['username']}
-            ],
-            enable_cross_partition_query=True
-        ))
+        resp = players_container.read_item(item=submitted['username'], partition_key=submitted['username'])
 
-        if len(resp)==1 and resp[0]['password'] == submitted['password']:
+        if resp['password'] == submitted['password']:
             return func.HttpResponse(body=json.dumps({"result" : True, "msg": "OK" }),
                 status_code = 200)
         else:

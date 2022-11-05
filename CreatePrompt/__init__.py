@@ -40,15 +40,9 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
 
 
     try:
-        resp = list(players_container.query_items(
-            query='SELECT c.password FROM c WHERE c.id=@id',
-            parameters=[
-                {'name':'@id',  'value':prompt_info['username']}
-            ],
-            enable_cross_partition_query=True
-        ))
+        resp = players_container.read_item(item=prompt_info['username'], partition_key=prompt_info['username'])
 
-        if len(resp)==1 and resp[0]['password'] == prompt_info['password']:
+        if resp['password'] == prompt_info['password']:
             existing_prompt = list(prompts_container.query_items(
                 query='SELECT * FROM c WHERE c.username=@username AND c.text=@text',
                 parameters=[
@@ -56,7 +50,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
                     {'name':'@text',  'value':prompt_info['text']}
                 ],
                 enable_cross_partition_query=True
-            ))
+            ))  
             if len(existing_prompt) == 0:
                 del prompt_info['password']
                 prompt_info['id'] = str(hash(uuid.uuid4()))
@@ -70,4 +64,5 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
             return func.HttpResponse(body=json.dumps({"result": False , "msg": "bad username or password"}),
                 status_code = 403)
     except Exception as e:
-        repr(e)
+        return func.HttpResponse(body=json.dumps({"result": False , "msg": "bad username or password"}),
+                status_code = 403)
