@@ -1,5 +1,7 @@
 import logging
 import json
+import uuid
+
 
 import azure.functions as func
 import azure.cosmos as cosmos
@@ -57,7 +59,8 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
             ))
             if len(existing_prompt) == 0:
                 del prompt_info['password']
-                prompts_container.create_item(prompt_info, enable_automatic_id_generation=True)
+                prompt_info['id'] = str(hash(uuid.uuid4()))
+                prompts_container.create_item(prompt_info)
                 return func.HttpResponse(body=json.dumps({"result" : True, "msg": "OK" }),
                 status_code = 200)
             else:
