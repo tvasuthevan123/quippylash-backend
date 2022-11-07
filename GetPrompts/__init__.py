@@ -5,25 +5,12 @@ import random
 import azure.functions as func
 import azure.cosmos as cosmos
 import azure.cosmos.exceptions as exceptions
-import config
-import os
+import connector
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
     logging.info('Get prompts')
 
-    ## Local Setup
-    client = cosmos.cosmos_client.CosmosClient(config.settings['db_URI'], config.settings['db_key'] )
-
-    db_client = client.get_database_client(config.settings['db_id'])
-
-    prompts_container = db_client.get_container_client(config.settings['prompts_container'])
-
-    ## Cloud Setup
-    # client = cosmos.cosmos_client.CosmosClient(os.environ['db_URI'], os.environ['db_key'] )
-
-    # db_client = client.get_database_client(os.environ['db_id'])
-
-    # players_container = db_client.get_container_client(os.environ['players_container'])
+    prompts_container = connector.getContainer('prompts_container', local=True)
 
     requested = req.get_json()
             
