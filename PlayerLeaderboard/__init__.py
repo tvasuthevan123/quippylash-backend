@@ -36,7 +36,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
             enable_cross_partition_query=True
         ))
         
-        all_users.sort(key=lambda x: (-x['total_score'], x['username']))
+        all_users.sort(key=lambda x: (-x.get('total_score', -1), x.get('username', None)))
 
         return func.HttpResponse(body=json.dumps(all_users[0:top_parameter]),
             status_code = 200)
