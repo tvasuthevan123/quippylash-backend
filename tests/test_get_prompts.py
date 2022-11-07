@@ -37,9 +37,9 @@ class TestFunction(unittest.TestCase):
         try:
             prompts_container.delete_item(item="0", partition_key="0")
             prompts_container.delete_item(item="1", partition_key="1")
-            prompts_container.delete_item(item="2", partition_key="1")
-            prompts_container.delete_item(item="3", partition_key="1")
-            prompts_container.delete_item(item="4", partition_key="1")
+            prompts_container.delete_item(item="2", partition_key="2")
+            prompts_container.delete_item(item="3", partition_key="3")
+            prompts_container.delete_item(item="4", partition_key="4")
         except Exception as e:
             # print(repr(e))
             pass
