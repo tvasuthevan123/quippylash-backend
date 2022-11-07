@@ -45,7 +45,7 @@ class TestFunction(unittest.TestCase):
     def test_player_leaderboard__simple(self):
         payload = {"top": 2}
 
-        resp = requests.get(
+        resp = requests.post(
             # Request URL (Use config)
             request_url,
             json=payload
@@ -64,7 +64,7 @@ class TestFunction(unittest.TestCase):
     def test_player_leaderboard__tiebreak(self):
         payload = {"top": 3}
 
-        resp = requests.get(
+        resp = requests.post(
             # Request URL (Use config)
             request_url,
             json=payload
