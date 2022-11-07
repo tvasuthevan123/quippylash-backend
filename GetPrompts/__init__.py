@@ -48,8 +48,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
                 return func.HttpResponse(body=json.dumps(return_prompts),
                     status_code = 200)
             else:
-                return func.HttpResponse(body=json.dumps([]),
-                    status_code = 200)
+                raise Exception('Required info unavailable')
         elif 'players' in requested.keys():
             usernames = requested['players']
             returned_prompts = []
@@ -64,6 +63,13 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
                 returned_prompts.extend(user_prompts)
             return func.HttpResponse(body=json.dumps(returned_prompts),
                 status_code = 200)
+        else:
+            return func.HttpResponse(body=json.dumps([]),
+                status_code = 200)
     except exceptions.CosmosHttpResponseError:
+        return func.HttpResponse(body=json.dumps([]),
+            status_code = 500)
+    except Exception as e:
+        logging.info(repr(e))
         return func.HttpResponse(body=json.dumps([]),
             status_code = 500)
